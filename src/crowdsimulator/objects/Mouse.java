@@ -1,13 +1,16 @@
 package crowdsimulator.objects;
 
+import java.awt.image.BufferedImage;
+
 /**
  *
  * @author Arnaud
  */
 public class Mouse extends Entity {
 
-    public Mouse(String imageLink, int x, int y) {
-        super(imageLink, x, y);
+    public Mouse(BufferedImage image, int x, int y) {
+        super(image, x, y);
+        this.isOccupied = true;
     }
     
     /**
@@ -16,7 +19,7 @@ public class Mouse extends Entity {
      * @param v La direction verticale (-1, 0 ou 1).
      */
     public void move(int h, int v) {
-        positionX += positionX + -1;
-        positionY += positionY + 0;
+        positionX += 0;
+        positionY += -1;
     }
 }

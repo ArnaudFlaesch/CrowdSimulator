@@ -1,4 +1,4 @@
-package crowdsimulator.window;
+package crowdsimulator;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,39 +11,38 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * La fenêtre contenant l'application.
+ *
  * @author Arnaud
  */
-public class GameWindow extends JFrame {
+public class GameWindow extends JFrame{
+
+    protected static String configFile;
+    protected final Dimension size = new Dimension(150, 20);
+    protected final JButton start = new JButton("LANCER");
+    protected JLabel nbTours = new JLabel("0");
+    protected JLabel nbMoves = new JLabel("0");
+    protected JLabel mouseArrived = new JLabel("0");
+    protected JLabel mouseMoving = new JLabel("0");
+    protected JPanel main_container = new JPanel();
+    protected PanelGrid center_container;
+    protected JPanel bottom_container = new JPanel();
+    protected JPanel bottom_left_container = new JPanel();
+    protected JPanel bottom_right_container = new JPanel();
+    protected JTextField inputNBMouse1 = new JTextField();
+    protected JTextField inputNBMouse2 = new JTextField();
+    protected JTextField inputTime = new JTextField();
     
-    private final Dimension size = new Dimension(150, 20);
-    private final JButton start = new JButton("LANCER");
-    private JLabel nbTours = new JLabel("0");
-    private JLabel nbMoves = new JLabel("0");
-    private JLabel mouseArrived = new JLabel("0");
-    private JLabel mouseMoving = new JLabel("0");
-    private final JPanel center_container = new JPanel();
-    private final JPanel bottom_container = new JPanel();
-    private final JPanel bottom_left_container = new JPanel();
-    private final JPanel bottom_right_container = new JPanel();
-    private final JPanel main_container = new JPanel();
-    private final JTextField inputNBMouse1 = new JTextField();
-    private final JTextField inputNBMouse2 = new JTextField();
-    private final JTextField inputTime = new JTextField();
-    
-    public GameWindow() {
-        
+    public GameWindow(String configFile) {
+        GameWindow.configFile = configFile;
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent event) {
                 System.exit(0);
             }
         });
-        
-        this.inputNBMouse1.setPreferredSize(size);
-        this.inputNBMouse2.setPreferredSize(size);
-        this.inputTime.setPreferredSize(size);
-        
+                
+        this.center_container = new PanelGrid(configFile);
+                
         this.main_container.setLayout(new BorderLayout());
         this.bottom_container.setLayout(new BorderLayout());
         this.main_container.add(center_container, BorderLayout.CENTER);
@@ -60,18 +59,12 @@ public class GameWindow extends JFrame {
         this.bottom_left_container.add(new JLabel("SOURIS ARRIVÉES"));
         this.bottom_left_container.add(mouseArrived);
         
-        this.bottom_right_container.add(new JLabel("PORTE 1"));
-        this.bottom_right_container.add(inputNBMouse1);
-        this.bottom_right_container.add(new JLabel("PORTE 2"));
-        this.bottom_right_container.add(inputNBMouse2);
-        this.bottom_right_container.add(new JLabel("VITESSE"));
-        this.bottom_right_container.add(inputTime);
-        this.bottom_right_container.add(start);        
-        
         this.setTitle("Simulateur de foule");
         this.setContentPane(main_container);
+        this.setSize(center_container.getWidth(), center_container.getHeight() + 50);
         this.setVisible(true);
         this.setResizable(false);
+        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
