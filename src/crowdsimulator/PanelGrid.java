@@ -5,10 +5,10 @@ import crowdsimulator.objects.Entity;
 import crowdsimulator.objects.Grass;
 import crowdsimulator.objects.Mouse;
 import crowdsimulator.objects.Path;
-import crowdsimulator.objects.Sprites;
 import crowdsimulator.objects.Start;
 import crowdsimulator.objects.Wall;
 import crowdsimulator.objects.Sprites;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,12 +21,66 @@ import javax.swing.JPanel;
  */
 public class PanelGrid extends JPanel {
     
-    private String configFile = "";
+    protected String configFile = "";
+    protected Dimension size = null;
     
     public PanelGrid(String configFile) {
         this.configFile = configFile;
-        this.initEntities();
-        this.setSize(1268, 520);
+        this.size = getMapSize();
+    }
+    
+    public Dimension getMapSize() {
+        try {
+            Scanner scanner = new Scanner(new File(configFile));
+            int rows = 0, cols = 0;
+            String line;
+            line = scanner.nextLine();
+            rows++;
+            cols = line.length();
+            while (scanner.hasNextLine()) {
+                scanner.nextLine();
+                rows++;
+            }
+            return (new Dimension(rows, cols));
+        }
+        catch (FileNotFoundException error) {
+            System.out.println(error);
+            return (null);
+        }
+    }
+    
+    public boolean isValidMap() {
+        try {
+            Scanner scanner = new Scanner(new File(configFile));
+            String line;
+            line = scanner.nextLine(); // Première ligne, on vérifie qu'il y a des murs partout
+            for (int i = 0; i<line.length(); i++) {
+                if (line.charAt(i) != '*') {
+                    return (false);
+                }
+            }
+            
+            while (scanner.hasNextLine()) {
+                line = scanner.nextLine();
+                if (!scanner.hasNextLine()) { // C'est la dernière ligne, on vérifie aussi qu'il y a des murs partout
+                    for (int i = 0; i<line.length(); i++) {
+                        if (line.charAt(i) != '*') {
+                            return (false);
+                        }
+                    }  
+                }
+                else {
+                    if (line.charAt(0) != '*' || line.charAt(this.size.height - 1) != '*') {
+                        return (false); 
+                    }
+                }
+            }
+            return (true);
+        }
+        catch (FileNotFoundException error) {
+            System.out.println(error);
+            return (false);
+        }
     }
     
     public void initEntities() {
@@ -34,7 +88,7 @@ public class PanelGrid extends JPanel {
         try {
             Scanner scanner = new Scanner(new File(configFile));
             int row = 0;
-            String line = "";
+            String line;
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
                 for (int i = 0; i<line.length(); i++) {

@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
  */
 public class Start extends Entity {
 
+    public int index;
     private int nbSouris = 0;
     
     public Start(BufferedImage image, int x, int y) {

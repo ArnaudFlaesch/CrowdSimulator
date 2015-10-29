@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -18,7 +19,6 @@ public class GameWindow extends JFrame{
 
     protected static String configFile;
     protected final Dimension size = new Dimension(150, 20);
-    protected final JButton start = new JButton("LANCER");
     protected JLabel nbTours = new JLabel("0");
     protected JLabel nbMoves = new JLabel("0");
     protected JLabel mouseArrived = new JLabel("0");
@@ -27,6 +27,7 @@ public class GameWindow extends JFrame{
     protected PanelGrid center_container;
     protected JPanel bottom_container = new JPanel();
     protected JPanel bottom_left_container = new JPanel();
+    protected JPanel bottom_center_container = new JPanel();
     protected JPanel bottom_right_container = new JPanel();
     protected JTextField inputNBMouse1 = new JTextField();
     protected JTextField inputNBMouse2 = new JTextField();
@@ -42,12 +43,21 @@ public class GameWindow extends JFrame{
         });
                 
         this.center_container = new PanelGrid(configFile);
+        if (center_container.isValidMap()) {
+            center_container.setSize(center_container.size.height * 26 + 10, center_container.size.width * 26 + 10);
+            center_container.initEntities();
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Le fichier texte n'est pas valide !", "Erreur dans le fichier texte", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
                 
         this.main_container.setLayout(new BorderLayout());
         this.bottom_container.setLayout(new BorderLayout());
         this.main_container.add(center_container, BorderLayout.CENTER);
         this.main_container.add(bottom_container, BorderLayout.SOUTH);
         this.bottom_container.add(bottom_left_container, BorderLayout.WEST);
+        this.bottom_container.add(bottom_center_container, BorderLayout.CENTER);
         this.bottom_container.add(bottom_right_container, BorderLayout.EAST);
         
         this.bottom_left_container.add(new JLabel("TOURS"));

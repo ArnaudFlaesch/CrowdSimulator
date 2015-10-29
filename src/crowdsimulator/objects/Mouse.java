@@ -17,9 +17,11 @@ public class Mouse extends Entity {
      * Déplace la souris.
      * @param h La direction horizontale (-1, 0 ou 1).
      * @param v La direction verticale (-1, 0 ou 1).
+     * @return True si la souris a bougé (on incrémente le nombre de déplacements), False sinon.
      */
-    public void move(int h, int v) {
+    public boolean move(int h, int v) {
         positionX += 0;
         positionY += -1;
+        return (true);
     }
 }
