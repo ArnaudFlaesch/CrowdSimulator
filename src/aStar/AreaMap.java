@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class AreaMap {
 
-    private int mapWith;
+    private int mapWith; 
     private int mapHeight;
     private ArrayList<ArrayList<Node>> map;
     private int startLocationX = 0;
