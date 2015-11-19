@@ -8,8 +8,8 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Path extends Edge {
     
-    protected int cost;
-    protected int poids;
+    public int cost;
+    public int poids;
     public boolean hasBeenVisited;
     public Path antecedent = null;
     

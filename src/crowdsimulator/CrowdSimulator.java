@@ -49,8 +49,10 @@ public class CrowdSimulator {
         do {            
             // On bouge les souris
             for (int i = 0; i<mouseList.size(); i++) {
-                Cheese cheese = CrowdSimulator.cheeseList.get(1);
-                if (mouseList.get(i).move(cheese.positionX, cheese.positionY)) {
+                for (Cheese cheese : cheeseList) {
+                    mouseList.get(i).getClosestCheese(cheese);
+                }
+                if (mouseList.get(i).move(mouseList.get(i).arrival.positionX, mouseList.get(i).arrival.positionY)) {
                     nbMoves++;
                     CrowdSimulator.window.nbMoves.setText("" +nbMoves);
                 }
