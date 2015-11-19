@@ -6,10 +6,10 @@ import java.awt.image.BufferedImage;
  *
  * @author Arnaud
  */
-public class Start extends Entity {
+public class Start extends Edge {
 
     public int index;
-    private int nbSouris = 0;
+    public int nbSouris = 0;
     
     public Start(BufferedImage image, int x, int y) {
         super(image, x, y);

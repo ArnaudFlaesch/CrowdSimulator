@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,20 +17,16 @@ import javax.swing.JTextField;
 public class GameWindow extends JFrame{
 
     protected static String configFile;
-    protected final Dimension size = new Dimension(150, 20);
     protected JLabel nbTours = new JLabel("0");
     protected JLabel nbMoves = new JLabel("0");
-    protected JLabel mouseArrived = new JLabel("0");
-    protected JLabel mouseMoving = new JLabel("0");
+    public JLabel mouseArrived = new JLabel("0");
+    public JLabel mouseMoving = new JLabel("0");
     protected JPanel main_container = new JPanel();
     protected PanelGrid center_container;
     protected JPanel bottom_container = new JPanel();
     protected JPanel bottom_left_container = new JPanel();
     protected JPanel bottom_center_container = new JPanel();
     protected JPanel bottom_right_container = new JPanel();
-    protected JTextField inputNBMouse1 = new JTextField();
-    protected JTextField inputNBMouse2 = new JTextField();
-    protected JTextField inputTime = new JTextField();
     
     public GameWindow(String configFile) {
         GameWindow.configFile = configFile;
@@ -44,7 +39,7 @@ public class GameWindow extends JFrame{
                 
         this.center_container = new PanelGrid(configFile);
         if (center_container.isValidMap()) {
-            center_container.setSize(center_container.size.height * 26 + 10, center_container.size.width * 26 + 10);
+            center_container.setSize(center_container.size.width * 26 + 10, center_container.size.height * 26 + 10);
             center_container.initEntities();
         }
         else {

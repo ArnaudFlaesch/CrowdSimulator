@@ -15,6 +15,7 @@ public class Sprites {
     public static BufferedImage cheeseImage = null;
     public static BufferedImage startImage = null;
     public static BufferedImage wallImage = null;
+    public static BufferedImage red = null;
     
     public static void initSprites() {
         try {

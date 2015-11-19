@@ -1,9 +1,11 @@
 package crowdsimulator;
 
-import crowdsimulator.objects.Entity;
+import crowdsimulator.objects.Cheese;
+import crowdsimulator.objects.Edge;
 import crowdsimulator.objects.Mouse;
 import crowdsimulator.objects.Sprites;
 import crowdsimulator.objects.Start;
+import crowdsimulator.objects.Wall;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -14,25 +16,26 @@ import javax.swing.JOptionPane;
  */
 public class CrowdSimulator {
     
-    protected static GameWindow window;
+    public static GameWindow window;
     protected static int nbTours = 0;
     protected static int nbMoves = 0;
-    protected static int nbMoving = 0;
+    public static int nbMoving = 0;
+    public static int nbArrived = 0;
     protected static int roundTime = 500;
-    protected static ArrayList<Entity> entities = new ArrayList();
-    protected static ArrayList<Mouse> mouseList = new ArrayList();
-    protected static ArrayList<Start> startList = new ArrayList();
+    public static Edge edgesList[][];
+    public static ArrayList<Mouse> mouseList = new ArrayList();
+    public static ArrayList<Start> startList = new ArrayList();
+    public static ArrayList<Cheese> cheeseList = new ArrayList();
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
         window = new GameWindow("src/resources/map.txt");
         int i = 1;
         for (Start start : startList) {
             start.index = i;
-            start.setNbSouris(Integer.parseInt(JOptionPane.showInputDialog(null, "Nombre de souris pour la porte "+i, "Porte "+i, JOptionPane.QUESTION_MESSAGE)));
+            start.nbSouris = Integer.parseInt(JOptionPane.showInputDialog(null, "Nombre de souris pour la porte "+i, "Porte "+i, JOptionPane.QUESTION_MESSAGE));
             i++;
             CrowdSimulator.window.bottom_center_container.add(new JLabel("Porte " +i+ " :"+start.getNbSouris()));
         }
@@ -43,26 +46,33 @@ public class CrowdSimulator {
     
     public static void start() {
         int nbRounds = 0;
-        while (nbRounds < 15) { //En fait, cela doit être : tant qu'il reste des souris à spawn et que celles en mouvement n'ont pas encore atteint un fromage
-            
-            // On commence par faire apparaître les souris sur la carte
-            CrowdSimulator.window.bottom_center_container.removeAll();
-            for (Start start : startList) {
-                if (start.getNbSouris() > 0) {
-                    mouseList.add(new Mouse(Sprites.mouseImage, start.positionX - 1, start.positionY - 1));
-                    start.setNbSouris(start.getNbSouris() - 1);
-                    nbMoving++;
-                    CrowdSimulator.window.mouseMoving.setText("" +nbMoving);
-                }
-                CrowdSimulator.window.bottom_center_container.add(new JLabel("PORTE " +start.index+ " : "+start.getNbSouris()));
-            }
-
-            // Ensuite on les fait se déplacer
-            for (Mouse mouse : mouseList) {
-                if (mouse.move(2, 2)) { // variables de test, elles ne changent rien au programme pour l'instant
+        do {            
+            // On bouge les souris
+            for (int i = 0; i<mouseList.size(); i++) {
+                Cheese cheese = CrowdSimulator.cheeseList.get(1);
+                if (mouseList.get(i).move(cheese.positionX, cheese.positionY)) {
                     nbMoves++;
                     CrowdSimulator.window.nbMoves.setText("" +nbMoves);
                 }
+            }
+            
+            // On fait apparaître les souris
+            CrowdSimulator.window.bottom_center_container.removeAll();
+            for (Start start : startList) {
+                if (start.nbSouris > 0) {
+                    for (int row = start.positionY-1; row<start.positionY + 2 && start.nbSouris > 0; row++) {
+                        for (int col = start.positionX-1; col<start.positionX + 2 && start.nbSouris > 0; col++) {      
+                            if (!(CrowdSimulator.edgesList[row][col].isOccupied || CrowdSimulator.edgesList[row][col] instanceof Wall)) {
+                                mouseList.add(new Mouse(Sprites.mouseImage, col, row));
+                                edgesList[row][col].isOccupied = true;
+                                start.nbSouris -= 1;
+                                nbMoving++;
+                                CrowdSimulator.window.mouseMoving.setText("" +nbMoving);
+                            }
+                        }
+                    }
+                }
+                CrowdSimulator.window.bottom_center_container.add(new JLabel("PORTE " +start.index+ " : "+start.getNbSouris()));
             }
             nbRounds++;
             CrowdSimulator.window.nbTours.setText(""+nbRounds);
@@ -74,6 +84,6 @@ public class CrowdSimulator {
             catch (InterruptedException error) {
                 System.out.println(error);
             }
-        }
+        } while (!(mouseList.isEmpty()));
     }
 }

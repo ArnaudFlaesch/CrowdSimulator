@@ -6,10 +6,10 @@ import java.awt.image.BufferedImage;
  *
  * @author Arnaud
  */
-public class Wall extends Edge {
-
-    public Wall(BufferedImage image, int x, int y) {
+public class Sand extends Path {
+    
+    public Sand(BufferedImage image, int x, int y) {
         super(image, x, y);
-        this.isOccupied = true;
+        this.cost = 1;
     }
 }

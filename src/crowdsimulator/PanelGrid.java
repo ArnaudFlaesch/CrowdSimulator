@@ -1,10 +1,10 @@
 package crowdsimulator;
 
 import crowdsimulator.objects.Cheese;
-import crowdsimulator.objects.Entity;
+import crowdsimulator.objects.Edge;
 import crowdsimulator.objects.Grass;
 import crowdsimulator.objects.Mouse;
-import crowdsimulator.objects.Path;
+import crowdsimulator.objects.Sand;
 import crowdsimulator.objects.Start;
 import crowdsimulator.objects.Wall;
 import crowdsimulator.objects.Sprites;
@@ -27,12 +27,13 @@ public class PanelGrid extends JPanel {
     public PanelGrid(String configFile) {
         this.configFile = configFile;
         this.size = getMapSize();
+        CrowdSimulator.edgesList = new Edge[this.size.height][this.size.width];
     }
     
     public Dimension getMapSize() {
         try {
             Scanner scanner = new Scanner(new File(configFile));
-            int rows = 0, cols = 0;
+            int rows = 0, cols;
             String line;
             line = scanner.nextLine();
             rows++;
@@ -41,7 +42,7 @@ public class PanelGrid extends JPanel {
                 scanner.nextLine();
                 rows++;
             }
-            return (new Dimension(rows, cols));
+            return (new Dimension(cols, rows));
         }
         catch (FileNotFoundException error) {
             System.out.println(error);
@@ -70,7 +71,7 @@ public class PanelGrid extends JPanel {
                     }  
                 }
                 else {
-                    if (line.charAt(0) != '*' || line.charAt(this.size.height - 1) != '*') {
+                    if (line.charAt(0) != '*' || line.charAt(this.size.width - 1) != '*') {
                         return (false); 
                     }
                 }
@@ -91,32 +92,33 @@ public class PanelGrid extends JPanel {
             String line;
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
-                for (int i = 0; i<line.length(); i++) {
-                    switch (line.charAt(i)) {
+                for (int col = 0; col<line.length(); col++) {
+                    switch (line.charAt(col)) {
                         case 'A' : {
-                            CrowdSimulator.entities.add(new Cheese(Sprites.cheeseImage, i, row));
+                            CrowdSimulator.edgesList[row][col] = new Cheese(Sprites.cheeseImage, col, row);
+                            CrowdSimulator.cheeseList.add(new Cheese(Sprites.cheeseImage, col, row));
                             break;
                         }
                         case 'D' : {
-                            CrowdSimulator.entities.add(new Start(Sprites.startImage, i, row));
-                            CrowdSimulator.startList.add(new Start(Sprites.startImage, i, row));
+                            CrowdSimulator.edgesList[row][col] = new Start(Sprites.startImage, col, row);
+                            CrowdSimulator.startList.add(new Start(Sprites.startImage, col, row));
                             break;
                         }
                         case '*' : {
-                            CrowdSimulator.entities.add(new Wall(Sprites.wallImage, i, row));
+                            CrowdSimulator.edgesList[row][col] = new Wall(Sprites.wallImage, col, row);
                             break;
                         }
                         case 32 : {
-                            CrowdSimulator.entities.add(new Path(Sprites.pathImage, i, row));
+                            CrowdSimulator.edgesList[row][col] = new Sand(Sprites.pathImage, col, row);
                             break;
                         }
                         case 'G' : {
-                            CrowdSimulator.entities.add(new Grass(Sprites.grassImage, i, row));
+                            CrowdSimulator.edgesList[row][col] = new Grass(Sprites.grassImage, col, row);
                             break;
                         }
                         default : {
                             // Si un caractère n'est pas reconnu, on met un mur
-                            CrowdSimulator.entities.add(new Wall(Sprites.wallImage, i, row));
+                            CrowdSimulator.edgesList[row][col] = new Wall(Sprites.wallImage, col, row);
                             break;
                         }
                     }
@@ -132,9 +134,13 @@ public class PanelGrid extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        for(Entity entity : CrowdSimulator.entities) {
-            g.drawImage(entity.image, entity.positionX*26, entity.positionY*26, 26, 26, this);
+        for (int i = 0; i<CrowdSimulator.edgesList.length; i++) {
+            for (int j = 0; j<CrowdSimulator.edgesList[i].length; j++) {
+                Edge entity = CrowdSimulator.edgesList[i][j];
+                g.drawImage(entity.image, entity.positionX*26, entity.positionY*26, 26, 26, this);
+            }
         }
+
         for(Mouse mouse : CrowdSimulator.mouseList) {
             g.drawImage(mouse.image, mouse.positionX*26, mouse.positionY*26, 26, 26, this);
         }
