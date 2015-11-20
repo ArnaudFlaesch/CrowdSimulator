@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author Arnaud
+ * @author Arnaud Flaesch, Maxime Mollard, Yohan Lamerand
  */
 public abstract class Path extends Edge {
     

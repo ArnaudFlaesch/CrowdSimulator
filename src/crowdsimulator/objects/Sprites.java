@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 
 /**
  *
- * @author Arnaud
+ * @author Arnaud Flaesch, Maxime Mollard, Yohan Lamerand
  */
 public class Sprites {
     public static BufferedImage pathImage = null;
