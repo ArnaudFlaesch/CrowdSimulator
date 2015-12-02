@@ -66,11 +66,12 @@ public class CrowdSimulator {
 
     public static void start(CrowdSimulator simulator) {
         int nbRounds = 0;
+        Dijkstra.initNeighbours();
         do {
             // On bouge les souris
             for (int i = 0; i < simulator.mouseList.size(); i++) {
                 for (Cheese cheese : simulator.cheeseList) {
-                        simulator.mouseList.get(i).getClosestCheese(cheese, simulator);
+                    simulator.mouseList.get(i).getClosestCheese(cheese, simulator);
                 }
                 if (simulator.mouseList.get(i).move(simulator.mouseList.get(i).arrival.positionX, simulator.mouseList.get(i).arrival.positionY, simulator)) {
                     simulator.nbMoves++;

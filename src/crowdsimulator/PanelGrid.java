@@ -129,7 +129,7 @@ public class PanelGrid extends JPanel {
                         }
                         default: {
                             // Si un caractere n'est pas reconnu, on informe de l'erreur puis on quite
-                            JOptionPane.showMessageDialog(this, "Attention\n La carte charg�e n'est pas correct !", " titre ",JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "Attention\n La carte chargée n'est pas correcte !", "Erreur", JOptionPane.ERROR_MESSAGE);
                             System.exit(0);
                             break;
                         }
@@ -145,17 +145,17 @@ public class PanelGrid extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
         for (int i = 0; i < simulator.edgesList.length; i++) {
             for (int j = 0; j < simulator.edgesList[i].length; j++) {
                 Edge entity = simulator.edgesList[i][j];
-                g.drawImage(entity.image, entity.positionX * 26, entity.positionY * 26, 26, 26, this);
+                graphics.drawImage(entity.image, entity.positionX * 26, entity.positionY * 26, 26, 26, this);
             }
         }
 
         for (Mouse mouse : simulator.mouseList) {
-            g.drawImage(mouse.image, mouse.positionX * 26, mouse.positionY * 26, 26, 26, this);
+            graphics.drawImage(mouse.image, mouse.positionX * 26, mouse.positionY * 26, 26, 26, this);
         }
     }
 }

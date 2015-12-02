@@ -29,7 +29,7 @@ public class GameWindow extends JFrame{
     protected JPanel bottom_right_container = new JPanel();
     private CrowdSimulator simulator;
     
-    public GameWindow(String configFile , CrowdSimulator simulator) {
+    public GameWindow(String configFile, CrowdSimulator simulator) {
     	this.simulator = simulator;
         GameWindow.configFile = configFile;
         this.addWindowListener(new WindowAdapter() {
